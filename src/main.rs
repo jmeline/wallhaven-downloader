@@ -95,6 +95,8 @@ async fn mass_search_wallpapers(client: &Arc<ApiClient>, range: u32) -> Result<V
     let semaphore = Arc::new(Semaphore::new(concurrency_limit));
     let mut tasks = JoinSet::new();
 
+    println!("Starting mass search wallpapers ({range})");
+
     for i in 1..=range {
         let client = Arc::clone(client);
         let semaphore = Arc::clone(&semaphore);
@@ -114,9 +116,6 @@ async fn mass_search_wallpapers(client: &Arc<ApiClient>, range: u32) -> Result<V
     while let Some(result) = tasks.join_next().await {
         match result {
             Ok(Ok(result)) => {
-                for item in &result.data {
-                    println!("{:?}", item.path);
-                }
                 results.extend(result.data);
             }
             Ok(Err(err)) => eprintln!("Search failed: {err}"),
@@ -131,6 +130,8 @@ async fn mass_download_wallpapers(client: &Arc<ApiClient>, wallpapers: &[Data]) 
     let concurrency_limit = 20;
     let semaphore = Arc::new(Semaphore::new(concurrency_limit));
     let mut downloads = JoinSet::new();
+
+    println!("Starting downloads for {} wallpapers", wallpapers.len());
 
     for data in wallpapers {
         let client = Arc::clone(client);
