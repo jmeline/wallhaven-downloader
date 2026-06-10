@@ -1,11 +1,11 @@
 mod models;
 
-use std::env::current_dir;
-use std::sync::Arc;
-use reqwest::Client;
-use std::time::Duration;
 use anyhow::anyhow;
 use models::wallpaper_data::{WallpaperData, WallpaperSearchResults, Data};
+use reqwest::Client;
+use std::env::current_dir;
+use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::Semaphore;
 use tokio::task::JoinSet;
 
